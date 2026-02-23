@@ -8,7 +8,6 @@ public class ArmyViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<Unit> Units { get; set; }
     public Unit SelectedUnit { get; set; }
-
     public int TotalPoints => Units.Sum(u => u.Points);
 
     public ArmyViewModel()
