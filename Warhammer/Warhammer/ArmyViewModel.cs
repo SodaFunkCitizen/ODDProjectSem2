@@ -3,95 +3,58 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using Warhammer;
 
 public class ArmyViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<Unit> Units { get; set; }
-
-    private Unit _selectedUnit;
-    public Unit SelectedUnit
-    {
-        get => _selectedUnit;
-        set
-        {
-            _selectedUnit = value;
-            OnPropertyChanged(nameof(SelectedUnit));
-        }
-    }
+    public Unit SelectedUnit { get; set; }
 
     public int TotalPoints => Units.Sum(u => u.Points);
-
-    // Commands
-    public RelayCommand AddUnitCommand { get; }
-    public RelayCommand RemoveUnitCommand { get; }
-    public RelayCommand ValidateCommand { get; }
-    public RelayCommand ExportCommand { get; }
 
     public ArmyViewModel()
     {
         Units = new ObservableCollection<Unit>();
-        Units.CollectionChanged += (s, e) => OnPropertyChanged(nameof(TotalPoints));
-
-        AddUnitCommand = new RelayCommand(_ => AddUnit());
-        RemoveUnitCommand = new RelayCommand(_ => RemoveUnit(), _ => SelectedUnit != null);
-        ValidateCommand = new RelayCommand(_ => ValidateArmy());
-        ExportCommand = new RelayCommand(_ => ExportArmy());
+        Units.CollectionChanged += (s, e) =>
+            OnPropertyChanged(nameof(TotalPoints));
 
         LoadSampleData();
     }
 
-    private void AddUnit()
+    public void AddUnit()
     {
-        var newUnit = new Unit
+        var unit = new Unit
         {
             Name = "Intercessor Squad",
             BattlefieldRole = "Battleline",
             Keywords = "Infantry, Tacticus, Core",
-            Points = 95,
-            Wargear = new List<string>() { "Bolt Rifles", "Frag Grenades", "Krak Grenades" },
-            Abilities = new List<string>() { "Oath of Moment", "Objective Secured" }
+            Points = 95
         };
 
-        Units.Add(newUnit);
-        SelectedUnit = newUnit;
+        Units.Add(unit);
+        SelectedUnit = unit;
+
+        OnPropertyChanged(nameof(SelectedUnit));
         OnPropertyChanged(nameof(TotalPoints));
     }
 
-    private void RemoveUnit()
-    {
-        if (SelectedUnit != null)
-        {
-            Units.Remove(SelectedUnit);
-            SelectedUnit = null;
-            OnPropertyChanged(nameof(TotalPoints));
-        }
-    }
-
-    private void ValidateArmy()
+    public void ValidateArmy()
     {
         if (TotalPoints > 2000)
-        {
-            MessageBox.Show("Army exceeds 2000 points!", "Validation");
-        }
+            MessageBox.Show("Army exceeds 2000 points!");
         else
-        {
-            MessageBox.Show("Army is valid!", "Validation");
-        }
+            MessageBox.Show("Army is valid!");
     }
 
-    private void ExportArmy()
+    public void ExportArmy()
     {
-        string export = "Army List:\n\n";
+        string text = "Army List\n\n";
 
         foreach (var unit in Units)
-        {
-            export += $"{unit.Name} - {unit.Points} pts\n";
-        }
+            text += $"{unit.Name} - {unit.Points} pts\n";
 
-        export += $"\nTotal: {TotalPoints} pts";
+        text += $"\nTotal: {TotalPoints} pts";
 
-        MessageBox.Show(export, "Export Preview");
+        MessageBox.Show(text);
     }
 
     private void LoadSampleData()
@@ -101,9 +64,7 @@ public class ArmyViewModel : INotifyPropertyChanged
             Name = "Captain in Gravis Armour",
             BattlefieldRole = "Character",
             Keywords = "Character, Gravis, Leader",
-            Points = 105,
-            Wargear = new List<string>() { "Master-crafted Bolt Rifle", "Power Sword" },
-            Abilities = new List<string>() { "Rites of Battle", "Iron Resolve" }
+            Points = 105
         });
 
         Units.Add(new Unit
@@ -111,15 +72,12 @@ public class ArmyViewModel : INotifyPropertyChanged
             Name = "Redemptor Dreadnought",
             BattlefieldRole = "Vehicle",
             Keywords = "Vehicle, Dreadnought",
-            Points = 210,
-            Wargear = new List<string>() { "Macro Plasma Incinerator", "Onslaught Gatling Cannon" },
-            Abilities = new List<string>() { "Duty Eternal" }
+            Points = 210
         });
-
-        OnPropertyChanged(nameof(TotalPoints));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged(string name)
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        => PropertyChanged?.Invoke(this,
+            new PropertyChangedEventArgs(name));
 }
