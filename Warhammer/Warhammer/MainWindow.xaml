@@ -52,7 +52,6 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- HEADER -->
         <Border Grid.Row="0"
                 Grid.ColumnSpan="2"
                 Background="{StaticResource PanelBrush}"
@@ -86,7 +85,6 @@
             </Grid>
         </Border>
 
-        <!-- UNIT LIST -->
         <Border Grid.Row="1"
                 Grid.Column="0"
                 Background="{StaticResource PanelBrush}"
@@ -141,8 +139,7 @@
 
             </DockPanel>
         </Border>
-
-        <!-- DETAILS -->
+        
         <Border Grid.Row="1"
                 Grid.Column="1"
                 Background="{StaticResource PanelBrush}"
@@ -171,7 +168,6 @@
             </ScrollViewer>
         </Border>
 
-        <!-- FOOTER -->
         <Border Grid.Row="2"
                 Grid.ColumnSpan="2"
                 Background="{StaticResource PanelBrush}"
