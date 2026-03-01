@@ -7,7 +7,20 @@ using System.Windows;
 public class ArmyViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<Unit> Units { get; set; }
-    public Unit SelectedUnit { get; set; }
+    
+    private Unit _selectedUnit;
+    public Unit SelectedUnit
+    {
+        get => _selectedUnit;
+        set
+        {
+            if (_selectedUnit != value)
+            {
+                _selectedUnit = value;
+                OnPropertyChanged(nameof(SelectedUnit));
+            }
+        }
+    }
     public int TotalPoints => Units.Sum(u => u.Points);
 
     public ArmyViewModel()
