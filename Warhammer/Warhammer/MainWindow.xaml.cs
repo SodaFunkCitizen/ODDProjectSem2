@@ -19,6 +19,7 @@ namespace ArmyBuilder
             ViewModel.AddUnit();
         }
 
+
         private void Validate_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.ValidateArmy();
