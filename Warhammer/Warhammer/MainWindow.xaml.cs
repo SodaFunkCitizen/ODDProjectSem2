@@ -14,7 +14,6 @@ namespace ArmyBuilder
             ViewModel = new ArmyViewModel();
             DataContext = ViewModel;
         }
-
         private void AddUnit_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.AddUnit();

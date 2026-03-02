@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-
 public class Unit : INotifyPropertyChanged
 {
     public string Name { get; set; }

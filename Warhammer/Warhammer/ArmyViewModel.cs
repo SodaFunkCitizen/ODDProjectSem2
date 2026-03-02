@@ -32,6 +32,9 @@ public class ArmyViewModel : INotifyPropertyChanged
         LoadSampleData();
     }
 
+
+
+
     public void AddUnit()
     {
         var unit = new Unit

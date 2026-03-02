@@ -5,7 +5,7 @@
         Height="800"
         Width="1200"
         Background="#0f0f14">
-
+    
     <Window.Resources>
 
         <SolidColorBrush x:Key="PanelBrush" Color="#1a1a22"/>
