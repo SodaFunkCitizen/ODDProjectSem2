@@ -1,0 +1,155 @@
+<Window x:Class="WarhammerArmyMaker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:WarhammerArmyMaker.Models"
+        mc:Ignorable="d"
+        Title="Warhammer Army Maker"
+        Height="760"
+        Width="1220"
+        WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="14">
+        <Border DockPanel.Dock="Bottom" Background="#111827" CornerRadius="8" Padding="12" Margin="0,10,0,0">
+            <TextBlock Foreground="White" Text="{Binding StatusMessage}" />
+        </Border>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.1*" />
+                <ColumnDefinition Width="1.3*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="0,0,12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <GroupBox Header="Catalogue Import">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding CatalogueUrl, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Paste a raw .cat URL or a normal GitHub blob URL." />
+                        <Button Grid.Column="1"
+                                Content="Import Units"
+                                Command="{Binding ImportCatalogueCommand}" />
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Grid.Row="1" Header="Imported Units">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1.6*" />
+                        </Grid.RowDefinitions>
+
+                        <DataGrid Grid.Row="0"
+                                  ItemsSource="{Binding ImportedUnits}"
+                                  SelectedItem="{Binding SelectedImportedUnit}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single"
+                                  Margin="0,0,0,8">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Unit" Binding="{Binding Name}" Width="2*" />
+                                <DataGridTextColumn Header="Primary" Binding="{Binding PrimaryCategory}" Width="*" />
+                                <DataGridTextColumn Header="Stats" Binding="{Binding StatsDisplay}" Width="2*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Button Grid.Row="1"
+                                Content="Add Selected Unit To Army"
+                                HorizontalAlignment="Left"
+                                Command="{Binding AddSelectedUnitCommand}" />
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <GroupBox Header="Categories" Margin="0,8,8,0">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding SelectedImportedUnit.CategoriesDisplay}" />
+                                </ScrollViewer>
+                            </GroupBox>
+                            <GroupBox Grid.Column="1" Header="Abilities / Profiles" Margin="8,8,0,0">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding SelectedImportedUnit.AbilitiesDisplay}" />
+                                </ScrollViewer>
+                            </GroupBox>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1.4*" />
+                </Grid.RowDefinitions>
+
+                <GroupBox Header="Current Army">
+                    <StackPanel>
+                        <TextBlock Text="Army Name" FontWeight="SemiBold" />
+                        <TextBox Text="{Binding ArmyName, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Row="1" Header="Army Units">
+                    <DockPanel>
+                        <Button DockPanel.Dock="Bottom"
+                                Content="Remove Selected Unit"
+                                HorizontalAlignment="Left"
+                                Command="{Binding RemoveSelectedArmyUnitCommand}" />
+                        <DataGrid ItemsSource="{Binding CurrentArmyUnits}"
+                                  SelectedItem="{Binding SelectedArmyUnit}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Unit" Binding="{Binding UnitName}" Width="2*" />
+                                <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="Auto" />
+                                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Row="2" Header="Database Actions">
+                    <WrapPanel>
+                        <Button Content="Save To Local DB" Command="{Binding SaveArmyCommand}" />
+                        <Button Content="Export Army DB" Command="{Binding ExportArmyDatabaseCommand}" />
+                        <Button Content="Import Army DB" Command="{Binding ImportArmyDatabaseCommand}" />
+                    </WrapPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Row="3" Header="Saved Armies">
+                    <ListBox ItemsSource="{Binding SavedArmies}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:Army}">
+                                <Border BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14" />
+                                        <TextBlock Text="{Binding Faction}" />
+                                        <TextBlock Text="{Binding CreatedUtc}" Foreground="#4B5563" />
+                                        <Button Content="Load"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding DataContext.LoadSavedArmyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
