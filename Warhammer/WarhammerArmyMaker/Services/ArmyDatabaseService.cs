@@ -25,23 +25,23 @@ public sealed class ArmyDatabaseService
 
         var command = connection.CreateCommand();
         command.CommandText = @"
-CREATE TABLE IF NOT EXISTS Armies (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    Name TEXT NOT NULL,
-    Faction TEXT NOT NULL,
-    CreatedUtc TEXT NOT NULL
-);
+            CREATE TABLE IF NOT EXISTS Armies (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name TEXT NOT NULL,
+            Faction TEXT NOT NULL,
+            CreatedUtc TEXT NOT NULL
+            );
 
-CREATE TABLE IF NOT EXISTS ArmyUnits (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ArmyId INTEGER NOT NULL,
-    UnitName TEXT NOT NULL,
-    Quantity INTEGER NOT NULL,
-    Notes TEXT NOT NULL,
-    StatsJson TEXT NOT NULL,
-    CategoriesJson TEXT NOT NULL,
-    FOREIGN KEY (ArmyId) REFERENCES Armies(Id)
-);";
+            CREATE TABLE IF NOT EXISTS ArmyUnits (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ArmyId INTEGER NOT NULL,
+            UnitName TEXT NOT NULL,
+            Quantity INTEGER NOT NULL,
+            Notes TEXT NOT NULL,
+            StatsJson TEXT NOT NULL,
+            CategoriesJson TEXT NOT NULL,
+            FOREIGN KEY (ArmyId) REFERENCES Armies(Id)
+            );";
         command.ExecuteNonQuery();
     }
 
