@@ -148,6 +148,75 @@
                 Background="{StaticResource PanelBrush}"
                 CornerRadius="8"
                 Padding="10">
+            <TabControl x:Name="MainTabs" Background="Transparent" BorderThickness="0">
+            <TabItem Header="Army Builder">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                                Background="{StaticResource PanelBrush}"
+                                CornerRadius="8"
+                                Padding="10"
+                                Margin="0,0,10,0">
+                        <DockPanel>
+                            <TextBlock Text="UNITS" Style="{StaticResource HeaderText}"
+                                           DockPanel.Dock="Top" Margin="0,0,0,10"/>
+
+                                <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                                    <TextBox Text="{Binding UnitSearch, UpdateSourceTrigger=PropertyChanged}"
+                                             ToolTip="Search by name/role/keywords"
+                                             Margin="0,0,0,6"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <ComboBox Grid.Column="0"
+                                                  ItemsSource="{Binding UnitRoles}"
+                                                  SelectedItem="{Binding UnitRoleFilter}"/>
+                                        <ComboBox Grid.Column="2"
+                                                  ItemsSource="{Binding UnitSortOptions}"
+                                                  SelectedItem="{Binding UnitSort}"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <ListBox ItemsSource="{Binding UnitsView}"
+                                         SelectedItem="{Binding SelectedUnit}"
+                                         ItemTemplate="{StaticResource UnitListTemplate}"/>
+                        </DockPanel>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                                Background="{StaticResource PanelBrush}"
+                                CornerRadius="8"
+                                Padding="15">
+                        <ScrollViewer>
+                            <StackPanel DataContext="{Binding SelectedUnit}">
+                                <TextBlock Text="Unit Details" Style="{StaticResource HeaderText}" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource AccentBrush}" FontSize="16" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding BattlefieldRole}" Foreground="{StaticResource SubTextBrush}" Margin="0,0,0,6"/>
+                                <TextBlock Text="{Binding Keywords}" Foreground="{StaticResource SubTextBrush}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="Notes" Foreground="White" FontWeight="Bold" Margin="0,0,0,6"/>
+                                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Height="80" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+                                <TextBlock Text="Created" Foreground="White" FontWeight="Bold" Margin="0,10,0,6"/>
+                                <TextBlock Text="{Binding CreatedAtUtc, StringFormat={}{0:G} (UTC)}" Foreground="{StaticResource SubTextBrush}"/>
+
+                                <TextBlock Text="Points" Foreground="White" FontWeight="Bold" Margin="0,10,0,6"/>
+                                <TextBox Text="{Binding Points, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+            </TabControl>
         </Border>
     </Grid>
 </Window>
