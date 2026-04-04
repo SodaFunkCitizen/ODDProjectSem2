@@ -1,12 +1,136 @@
-﻿<Window x:Class="WarhammerArmyBuilder.Window1"
+﻿<Window x:Class="WarhammerArmyBuilder.AddUnitWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WarhammerArmyBuilder"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800">
-    <Grid>
-        
+        Title="Add Unit" Height="520" Width="640"
+        Background="#0f0f14" 
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <SolidColorBrush x:Key="PanelBrush" Color="#1a1a22"/>
+        <SolidColorBrush x:Key="CardBrush" Color="#242433"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#00FF88"/>
+        <SolidColorBrush x:Key="SubTextBrush" Color="#AAAAAA"/>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource CardBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#333344"/>
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource CardBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#333344"/>
+            <Setter Property="Padding" Value="10,6"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{StaticResource CardBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#333344"/>
+            <Setter Property="Padding" Value="6,4"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="{StaticResource PanelBrush}" CornerRadius="8" Padding="12">
+            <TabControl Background="Transparent" BorderThickness="0">
+                <TabItem Header="From Catalogue">
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ListBox Grid.Column="0"
+                                     ItemsSource="{Binding CatalogueUnits}"
+                                     SelectedItem="{Binding SelectedTemplate}"
+                                     DisplayMemberPath="Name"
+                                     Margin="0,0,10,0"/>
+
+                            <Border Grid.Column="1" Background="{StaticResource PanelBrush}" CornerRadius="8" Padding="12">
+                                <StackPanel DataContext="{Binding SelectedTemplate}">
+                                    <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                                    <TextBlock Text="{Binding BattlefieldRole}" Foreground="{StaticResource SubTextBrush}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Points" FontWeight="Bold" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="TemplatePointsText" Text="0" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Notes" FontWeight="Bold" Margin="0,0,0,4"/>
+                                    <TextBox x:Name="TemplateNotesText" Height="80" AcceptsReturn="True" TextWrapping="Wrap"/>
+
+                                    <TextBlock Text="Abilities (preview)" FontWeight="Bold" Margin="0,10,0,4"/>
+                                    <TextBlock Text="{Binding Abilities}" Foreground="{StaticResource SubTextBrush}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <Button Content="Add" Click="AddFromTemplate_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Custom Unit">
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Name" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <TextBox x:Name="CustomNameText" Grid.Row="1" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Role" Grid.Row="2" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <ComboBox x:Name="CustomRoleCombo" Grid.Row="3" Margin="0,0,0,10">
+                            <ComboBoxItem Content="Character"/>
+                            <ComboBoxItem Content="Infantry"/>
+                            <ComboBoxItem Content="Vehicle"/>
+                            <ComboBoxItem Content="Unit"/>
+                        </ComboBox>
+
+                        <StackPanel Grid.Row="4">
+                            <TextBlock Text="Keywords" FontWeight="Bold" Margin="0,0,0,4"/>
+                            <TextBox x:Name="CustomKeywordsText" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Points" FontWeight="Bold" Margin="0,0,0,4"/>
+                            <TextBox x:Name="CustomPointsText" Text="0" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Notes" FontWeight="Bold" Margin="0,0,0,4"/>
+                            <TextBox x:Name="CustomNotesText" Height="90" AcceptsReturn="True" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <Button Content="Add" Click="AddCustom_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Border>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="Close" Click="Close_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
