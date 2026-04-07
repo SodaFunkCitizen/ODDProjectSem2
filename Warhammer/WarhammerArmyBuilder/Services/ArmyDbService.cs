@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Data.Sqlite;
 using System.Threading.Tasks;
-using WarhammerArmyBuilder.Army;
+using WarhammerArmyBuilder;
 
 namespace WarhammerArmyBuilder.Services
 {
@@ -13,6 +13,7 @@ namespace WarhammerArmyBuilder.Services
     {
         private readonly string _dbPath;
 
+        List<Army> _armies = new List<Army>();
 
         public ArmyDbService(string dbPath)
         {
@@ -79,7 +80,7 @@ namespace WarhammerArmyBuilder.Services
 
             }
 
-            foreach (var army in GetArmies())
+            foreach (var armies in GetArmies())
             {
                 var ins = connection.CreateCommand();
                 {
@@ -125,20 +126,20 @@ namespace WarhammerArmyBuilder.Services
             }
             return armies;
         }
-        public Army? LoadArmy(string id)
+        public Army LoadArmy(string id)
         {
             var connection = new SqliteConnection(ConnectionString);
             {
-                Army? army = null;
+                Army army = null;
                 connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = @"
+                var command1 = connection.CreateCommand();
+                command1.CommandText = @"
                     SELECT Id, Name, Faction, CreatedAtUtc, LastModifiedUtc
                     FROM Armies
                     WHERE Id = @Id;
                 ";
-                command.Parameters.AddWithValue("@Id", id);
-                using (var reader = command.ExecuteReader())
+                command1.Parameters.AddWithValue("@Id", id);
+                using (var reader = command1.ExecuteReader())
                 {
                     if (reader.Read())
                     {
