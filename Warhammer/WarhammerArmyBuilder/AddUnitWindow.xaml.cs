@@ -28,7 +28,8 @@ namespace WarhammerArmyBuilder
 
         public AddUnitWindow()
         {
-            InitializeComponent();
+           InitializeComponent();
+          
         }
 
         private void AddFromTemplate_Click()

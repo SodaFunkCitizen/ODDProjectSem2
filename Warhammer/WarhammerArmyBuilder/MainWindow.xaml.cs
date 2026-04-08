@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WarhammerArmyBuilder;
 
 namespace ArmyBuilder
 {
@@ -22,9 +23,17 @@ namespace ArmyBuilder
             InitializeComponent();
         }
 
-        private void AddUnit_Click()
+        private void AddUnit_Click(object sender, RoutedEventArgs e)
         {
-           
+           try
+            {
+                var dlg = new { Owner = this };
+                dlg.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Add Unit Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void RemoveUnit_Click()
