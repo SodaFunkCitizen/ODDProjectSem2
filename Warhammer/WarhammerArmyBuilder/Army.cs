@@ -26,11 +26,11 @@ namespace WarhammerArmyBuilder
         public string Faction { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public DateTime LastModifiedUtc { get; set; }
-        public List<ArmyUnit> Units { get; set; } = new List<ArmyUnit>();
+        public List<Unit> Units { get; set; } = new List<Unit>();
     }
 
 
-    public class ArmyUnit
+    public class Unit
     {
         public string Id { get; set; }
         public string Name { get; set; }

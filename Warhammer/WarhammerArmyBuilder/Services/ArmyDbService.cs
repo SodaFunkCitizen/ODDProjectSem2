@@ -128,9 +128,10 @@ namespace WarhammerArmyBuilder.Services
         }
         public Army LoadArmy(string id)
         {
+            Army army = null;
             var connection = new SqliteConnection(ConnectionString);
             {
-                Army army = null;
+
                 connection.Open();
                 var command1 = connection.CreateCommand();
                 command1.CommandText = @"
@@ -171,10 +172,9 @@ namespace WarhammerArmyBuilder.Services
                         army.Units.Add(new Unit
                         {
                             Id = reader.GetString(0),
-                            ArmyId = reader.GetString(1),
                             Name = reader.GetString(2),
                             BattlefieldRole = reader.GetString(3),
-                            Keywords = reader.GetString(4).Split(',').ToList(),
+                            Keywords = reader.GetString(3),
                             Points = reader.GetInt32(5),
                             CreatedAtUtc = DateTime.Parse(reader.GetString(6)),
                             Notes = reader.GetString(7)
@@ -231,4 +231,5 @@ namespace WarhammerArmyBuilder.Services
                 command.ExecuteNonQuery();
             }
         }
+    }
 }
