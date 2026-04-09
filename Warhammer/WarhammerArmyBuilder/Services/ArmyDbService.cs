@@ -114,8 +114,7 @@ namespace WarhammerArmyBuilder.Services
                     while (reader.Read())
                     {
                         armies.Add(new Army
-                        {
-                            Id = reader.GetString(0),
+                        { 
                             Name = reader.GetString(1),
                             Faction = reader.GetString(2),
                             CreatedAtUtc = DateTime.Parse(reader.GetString(3)),
@@ -146,7 +145,6 @@ namespace WarhammerArmyBuilder.Services
                     {
                         return new Army
                         {
-                            Id = reader.GetString(0),
                             Name = reader.GetString(1),
                             Faction = reader.GetString(2),
                             CreatedAtUtc = DateTime.Parse(reader.GetString(3)),
