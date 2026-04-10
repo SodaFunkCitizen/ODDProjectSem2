@@ -47,7 +47,20 @@ namespace WarhammerArmyBuilder
 
     public class Unit:UnitBase
     {
-        
+        private Guid _id = Guid.NewGuid();
+        private string _notes = "";
+
+        public Guid Id
+        {
+            get => _id;
+            set => _id = value;
+        }
+
+        public string Notes
+        {
+            get => _notes;
+            set => _notes = value;
+        }
     }
 
     public class UnitTemplate:UnitBase

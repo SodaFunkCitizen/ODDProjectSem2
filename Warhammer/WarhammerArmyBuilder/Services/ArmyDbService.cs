@@ -169,7 +169,6 @@ namespace WarhammerArmyBuilder.Services
                     {
                         army.Units.Add(new Unit
                         {
-                            Id = reader.GetString(0),
                             Name = reader.GetString(2),
                             BattlefieldRole = reader.GetString(3),
                             Keywords = reader.GetString(3),
