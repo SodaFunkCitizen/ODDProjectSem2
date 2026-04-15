@@ -50,15 +50,14 @@ namespace WarhammerArmyBuilder.Services
             }
         }
 
-        private record UnitDto(Guid Id, string Name, string BattlefieldRole, string Keywords, int Points, DateTime CreatedAtUtc, string Notes)
+        private record UnitDto(string Name, string BattlefieldRole, string Keywords, int Points, DateTime CreatedAtUtc, string Notes)
         {
             public static UnitDto FromModel(Unit u)
-                => new(u.Id, u.Name, u.BattlefieldRole, u.Keywords, u.Points, u.CreatedAtUtc, u.Notes);
+                => new(u.Name, u.BattlefieldRole, u.Keywords, u.Points, u.CreatedAtUtc, u.Notes);
 
             public Unit ToModel()
                 => new()
                 {
-                    Id = Id,
                     Name = Name,
                     BattlefieldRole = BattlefieldRole,
                     Keywords = Keywords,

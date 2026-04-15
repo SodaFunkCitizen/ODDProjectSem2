@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -16,7 +17,7 @@ namespace WarhammerArmyBuilder.Services
         private static readonly XNamespace BsNs = "http://www.battlescribe.net/schema/catalogueSchema";
         public ObservableCollection<UnitTemplate> LoadEmbeddedSample()
         {
-            // A tiny subset based on the user's pasted catalogue snippet.
+            // A entered snippet of a Battlescribe catalogue XML for testing purposes. This is not a full catalogue, just one unit entry to demonstrate parsing.
             const string xml = @"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
 <catalogue xmlns=""http://www.battlescribe.net/schema/catalogueSchema"" name=""Imperium - Adeptus Astartes - Black Templars"">
   <sharedSelectionEntries>
@@ -82,7 +83,6 @@ namespace WarhammerArmyBuilder.Services
 
                 var name = (string)se.Attribute("name") ?? "Unknown Unit";
 
-                // Categories -> keywords
                 var cats = se.Element(BsNs + "categoryLinks")?
                     .Elements(BsNs + "categoryLink")
                     .Select(c => (string)c.Attribute("name"))
@@ -91,7 +91,6 @@ namespace WarhammerArmyBuilder.Services
                     .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToList() ?? new List<string>();
 
-                // Profiles
                 string statline = "";
                 var unitProfile = se.Element(BsNs + "profiles")?
                     .Elements(BsNs + "profile")
@@ -116,7 +115,7 @@ namespace WarhammerArmyBuilder.Services
                         var an = (string)p.Attribute("name") ?? "Ability";
                         var desc = p.Element(BsNs + "characteristics")?
                             .Elements(BsNs + "characteristic")
-                            .FirstOrDefault(ch => ((string?)ch.Attribute("name"))?.Equals("Description", StringComparison.OrdinalIgnoreCase) == true)
+                            .FirstOrDefault(ch => ((string)ch.Attribute("name"))?.Equals("Description", StringComparison.OrdinalIgnoreCase) == true)
                             ?.Value ?? "";
                         return string.IsNullOrWhiteSpace(desc) ? an : $"{an}: {desc}";
                     })
@@ -138,11 +137,11 @@ namespace WarhammerArmyBuilder.Services
             return list;
         }
 
-        private static string GuessRoleFromCategories(IReadOnlyList<string> cats)
+        private static string GuessRoleFromCategories(List<string> cats)
         {
-            if (cats.Any(c => c.Contains("Vehicle", StringComparison.OrdinalIgnoreCase))) return "Vehicle";
-            if (cats.Any(c => c.Contains("Character", StringComparison.OrdinalIgnoreCase))) return "Character";
-            if (cats.Any(c => c.Contains("Infantry", StringComparison.OrdinalIgnoreCase))) return "Infantry";
+            if (cats.Any(c => c != null && c.IndexOf("Vehicle", StringComparison.OrdinalIgnoreCase) >= 0)) return "Vehicle";
+            if (cats.Any(c => c != null && c.IndexOf("Character", StringComparison.OrdinalIgnoreCase) >= 0)) return "Character";
+            if (cats.Any(c => c != null && c.IndexOf("Infantry", StringComparison.OrdinalIgnoreCase) >= 0)) return "Infantry";
             return "Unit";
         }
     }

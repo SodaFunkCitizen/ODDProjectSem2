@@ -23,5 +23,4 @@ namespace WarhammerArmyBuilder.Util
             return value;
         }
     }
-
 }

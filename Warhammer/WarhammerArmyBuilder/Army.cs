@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -27,12 +28,11 @@ namespace WarhammerArmyBuilder
 
         public string Name { get; set; }
         public string Faction { get; set; }
-        public DateTime CreatedAtUtc { get=> _createdAtUtc; set => _createdAtUtc = value; }
-        public DateTime LastModifiedUtc { get => _lastModifiedUtc; set =>_lastModifiedUtc = value; }
-        public List<Unit> Units { get; set; } = new List<Unit>();
+        public DateTime CreatedAtUtc { get => _createdAtUtc; set => _createdAtUtc = value; }
+        public DateTime LastModifiedUtc { get => _lastModifiedUtc; set => _lastModifiedUtc = value; }
+        public ObservableCollection<Unit> Units { get; set; } = new ObservableCollection<Unit>();
+        public int TotalPoints => Units?.Sum(u => u.Points) ?? 0;
     }
-
-
     public class UnitBase
     {
         private DateTime _createdAtUtc = DateTime.UtcNow;
@@ -45,25 +45,26 @@ namespace WarhammerArmyBuilder
         public string Notes { get; set; }
     }
 
-    public class Unit:UnitBase
+    public class Unit : UnitBase
     {
-        private Guid _id = Guid.NewGuid();
-        private string _notes = "";
-
-        public Guid Id
+        internal bool Matches(string unitSearch)
         {
-            get => _id;
-            set => _id = value;
-        }
+            if (string.IsNullOrWhiteSpace(unitSearch))
+                return true;
 
-        public string Notes
-        {
-            get => _notes;
-            set => _notes = value;
+            unitSearch = unitSearch.Trim();
+
+            return (!string.IsNullOrWhiteSpace(Name) &&
+                    Name.IndexOf(unitSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                || (!string.IsNullOrWhiteSpace(BattlefieldRole) &&
+                    BattlefieldRole.IndexOf(unitSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                || (!string.IsNullOrWhiteSpace(Keywords) &&
+                    Keywords.IndexOf(unitSearch, StringComparison.OrdinalIgnoreCase) >= 0)
+                || (!string.IsNullOrWhiteSpace(Notes) &&
+                    Notes.IndexOf(unitSearch, StringComparison.OrdinalIgnoreCase) >= 0);
         }
     }
-
-    public class UnitTemplate:UnitBase
+    public class UnitTemplate : UnitBase
     {
         private string _source = "Unknown Source";
         public string Statline { get; set; }
